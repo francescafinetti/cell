@@ -6,7 +6,6 @@
 //
 import SwiftUI
 
-//some fake names just to avoid "CELL NUMBER 1-2-3.."
 
 class CellListViewModel: ObservableObject {
     @AppStorage("contactsData") private var contactsData: Data = Data()
@@ -17,6 +16,8 @@ class CellListViewModel: ObservableObject {
     init() {
         loadContacts()
     }
+
+    //some fake names just to avoid "CELL NUMBER 1-2-3.."
 
     private func loadContacts() {
         guard let decoded = try? JSONDecoder().decode([CellItem].self, from: contactsData) else {
