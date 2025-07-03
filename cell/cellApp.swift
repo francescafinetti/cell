@@ -11,7 +11,7 @@ import SwiftUI
 struct cellApp: App {
     var body: some Scene {
         WindowGroup {
-            CellListView()
+            ContainerView()
         }
     }
 }

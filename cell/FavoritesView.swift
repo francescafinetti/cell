@@ -1,17 +1,18 @@
 //
-//  CellListView.swift
+//  Untitled.swift
 //  cell
 //
 //  Created by Francesca Finetti on 03/07/25.
 //
+
 import SwiftUI
 
-struct ListView: View {
+struct FavoritesView: View {
     @ObservedObject var viewModel: CellListViewModel
 
     var body: some View {
         NavigationView {
-            List(viewModel.items) { item in
+            List(viewModel.items.filter { $0.isFavorite }) { item in
                 NavigationLink(destination: DetailView(item: item, viewModel: viewModel)) {
                     HStack {
                         Text(item.title)
@@ -19,14 +20,14 @@ struct ListView: View {
                         Button(action: {
                             viewModel.toggleFavorite(for: item)
                         }) {
-                            Image(systemName: item.isFavorite ? "star.fill" : "star")
+                            Image(systemName: "star.fill")
                                 .foregroundColor(.yellow)
                         }
                         .buttonStyle(BorderlessButtonStyle())
                     }
                 }
             }
-            .navigationTitle("All Contacts")
+            .navigationTitle("Favorites")
         }
     }
 }
