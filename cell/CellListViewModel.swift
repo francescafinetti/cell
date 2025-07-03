@@ -9,20 +9,53 @@ import SwiftUI
 //some fake names just to avoid "CELL NUMBER 1-2-3.."
 
 class CellListViewModel: ObservableObject {
-    @Published var items: [CellItem] = [
-        CellItem(id: UUID(), title: "Alessandro Rossi"),
-        CellItem(id: UUID(), title: "Giulia Bianchi"),
-        CellItem(id: UUID(), title: "Marco Esposito"),
-        CellItem(id: UUID(), title: "Francesca Moretti"),
-        CellItem(id: UUID(), title: "Luca Conti"),
-        CellItem(id: UUID(), title: "Martina Greco"),
-        CellItem(id: UUID(), title: "Davide Ferrara"),
-        CellItem(id: UUID(), title: "Sara Romano"),
-        CellItem(id: UUID(), title: "Federico Galli"),
-        CellItem(id: UUID(), title: "Elisa Fontana")
-    ]
-    
+    @AppStorage("contactsData") private var contactsData: Data = Data()
     @AppStorage("favoriteIDs") private var favoriteIDStrings: String = ""
+
+    @Published var items: [CellItem] = []
+
+    init() {
+        loadContacts()
+    }
+
+    private func loadContacts() {
+        guard let decoded = try? JSONDecoder().decode([CellItem].self, from: contactsData) else {
+            items = [
+                CellItem(id: UUID(), title: "Alessandro Rossi"),
+                CellItem(id: UUID(), title: "Giulia Bianchi"),
+                CellItem(id: UUID(), title: "Francesca Moretti"),
+            ]
+            saveContacts()
+            return
+        }
+        items = decoded
+    }
+
+    private func saveContacts() {
+        if let encoded = try? JSONEncoder().encode(items) {
+            contactsData = encoded
+        }
+    }
+
+    func addContact(named name: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        let newContact = CellItem(id: UUID(), title: trimmed)
+        items.append(newContact)
+        saveContacts()
+    }
+
+    func deleteContact(at offsets: IndexSet) {
+        let removed = offsets.map { items[$0] }
+
+        for contact in removed {
+            favoriteIDs.remove(contact.id)
+        }
+
+        items.remove(atOffsets: offsets)
+        saveContacts()
+    }
+
 
     var favoriteIDs: Set<UUID> {
         get {
@@ -48,6 +81,6 @@ class CellListViewModel: ObservableObject {
             updated.insert(item.id)
         }
         favoriteIDs = updated
-        objectWillChange.send() // forza aggiornamento
+        objectWillChange.send()
     }
 }
