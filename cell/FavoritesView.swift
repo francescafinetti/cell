@@ -12,7 +12,7 @@ struct FavoritesView: View {
 
     var body: some View {
         NavigationView {
-            List(viewModel.items.filter { $0.isFavorite }) { item in
+            List(viewModel.items.filter { viewModel.isFavorite($0) }) { item in
                 NavigationLink(destination: DetailView(item: item, viewModel: viewModel)) {
                     HStack {
                         Text(item.title)
@@ -20,7 +20,7 @@ struct FavoritesView: View {
                         Button(action: {
                             viewModel.toggleFavorite(for: item)
                         }) {
-                            Image(systemName: "star.fill")
+                            Image(systemName: viewModel.isFavorite(item) ? "star.fill" : "star")
                                 .foregroundColor(.yellow)
                         }
                         .buttonStyle(BorderlessButtonStyle())

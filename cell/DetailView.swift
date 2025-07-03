@@ -18,7 +18,7 @@ struct DetailView: View {
             Button(action: {
                 viewModel.toggleFavorite(for: item)
             }) {
-                Image(systemName: item.isFavorite ? "star.fill" : "star")
+                Image(systemName: viewModel.isFavorite(item) ? "star.fill" : "star")
                     .foregroundColor(.yellow)
                     .font(.largeTitle)
             }

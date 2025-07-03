@@ -7,8 +7,7 @@
 
 import SwiftUI
 
-struct CellItem: Identifiable {
-    let id = UUID()
-    var title: String
-    var isFavorite: Bool
+struct CellItem: Identifiable, Codable, Equatable {
+    let id: UUID
+    let title: String
 }
