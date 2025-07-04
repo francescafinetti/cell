@@ -32,7 +32,7 @@ class CellListViewModel: ObservableObject {
         items = decoded
     }
 
-    private func saveContacts() {
+    func saveContacts() {
         if let encoded = try? JSONEncoder().encode(items) {
             contactsData = encoded
         }
