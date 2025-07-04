@@ -14,7 +14,7 @@ struct ContainerView: View {
         TabView {
             ListView(viewModel: viewModel)
                 .tabItem {
-                    Label("All", systemImage: "list.bullet")
+                    Label("Contacts", systemImage: "person.fill")
                 }
 
             FavoritesView(viewModel: viewModel)
